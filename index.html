@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP in Java — Complete Interactive Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300;1,600&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a2e;
+  --paper: #faf8f2;
+  --cream: #f2efe6;
+  --accent: #c84b31;
+  --gold: #d4a017;
+  --teal: #2a7d6f;
+  --blue: #2c5f8a;
+  --muted: #7a7060;
+  --border: #ddd8c8;
+  --code-bg: #1e1e2e;
+  --code-text: #cdd6f4;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --serif: 'Fraunces', serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.7; }
+
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 9999; transition: width .1s; width: 0%; }
+
+#sidebar { position: fixed; left: 0; top: 0; width: 220px; height: 100vh; background: var(--ink); padding: 28px 0; z-index: 100; overflow-y: auto; display: flex; flex-direction: column; }
+.sidebar-logo { padding: 0 24px 24px; border-bottom: 1px solid #ffffff18; }
+.sidebar-logo h1 { font-family: var(--serif); font-size: 20px; font-weight: 900; color: #fff; line-height: 1.2; }
+.sidebar-logo span { color: var(--gold); font-style: italic; }
+.sidebar-logo p { font-size: 10px; letter-spacing: 2px; color: #ffffff55; text-transform: uppercase; font-family: var(--mono); margin-top: 4px; }
+.nav-section { padding: 16px 24px 6px; font-size: 9px; letter-spacing: 3px; color: #ffffff30; text-transform: uppercase; font-family: var(--mono); }
+.nav-link { display: flex; align-items: center; gap: 10px; padding: 9px 24px; color: #ffffff70; text-decoration: none; font-size: 13px; transition: all .15s; border-left: 3px solid transparent; font-family: var(--sans); }
+.nav-link:hover { color: #fff; background: #ffffff0a; }
+.nav-link.active { color: var(--gold); border-left-color: var(--gold); background: #ffffff08; }
+.nav-link .num { font-family: var(--mono); font-size: 10px; color: #ffffff30; min-width: 18px; }
+.nav-progress { padding: 20px 24px; margin-top: auto; border-top: 1px solid #ffffff18; }
+.nav-progress p { font-size: 11px; color: #ffffff40; font-family: var(--mono); margin-bottom: 8px; }
+.prog-bar { height: 4px; background: #ffffff15; border-radius: 2px; }
+.prog-fill { height: 4px; background: var(--gold); border-radius: 2px; transition: width .4s; }
+
+#main { margin-left: 220px; min-height: 100vh; }
+
+.hero { background: var(--ink); color: #fff; padding: 80px 80px 60px; position: relative; overflow: hidden; }
+.hero::before { content: 'OOP'; position: absolute; right: -20px; top: -20px; font-family: var(--serif); font-size: 200px; font-weight: 900; color: #ffffff06; line-height: 1; pointer-events: none; }
+.hero-tag { font-family: var(--mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+.hero h2 { font-family: var(--serif); font-size: 52px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+.hero h2 em { color: var(--gold); font-style: italic; }
+.hero p { font-size: 16px; color: #ffffff80; max-width: 500px; line-height: 1.7; }
+.hero-pills { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+.hero-pill { font-family: var(--mono); font-size: 11px; padding: 6px 14px; border-radius: 20px; border: 1px solid #ffffff25; color: #ffffff80; }
+.hero-pill.h { border-color: var(--gold); color: var(--gold); }
+
+.chapter { border-bottom: 1px solid var(--border); scroll-margin-top: 20px; }
+.chapter-header { padding: 52px 80px 36px; background: var(--cream); border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 24px; }
+.chapter-num { font-family: var(--serif); font-size: 72px; font-weight: 900; line-height: 1; color: var(--border); flex-shrink: 0; }
+.chapter-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.chapter-title { font-family: var(--serif); font-size: 36px; font-weight: 900; color: var(--ink); line-height: 1.2; }
+.chapter-title .accent { color: var(--accent); }
+.chapter-desc { font-size: 15px; color: var(--muted); margin-top: 8px; max-width: 500px; }
+.chapter-body { padding: 48px 80px; }
+
+.concept-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 28px; position: relative; overflow: hidden; }
+.concept-card::before { content: attr(data-icon); position: absolute; right: 24px; top: 18px; font-size: 36px; opacity: 0.15; }
+.concept-card h3 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin-bottom: 10px; color: var(--ink); }
+.concept-card p { color: #555; font-size: 15px; line-height: 1.75; }
+.concept-card .kw-badge { display: inline-block; background: var(--ink); color: var(--gold); font-family: var(--mono); font-size: 12px; padding: 3px 10px; border-radius: 4px; margin: 10px 4px 0 0; }
+
+/* ── CODE BLOCKS ── */
+.code-wrap { border-radius: 12px; overflow: hidden; margin: 24px 0; border: 1px solid #2a2a45; box-shadow: 0 4px 24px rgba(0,0,0,0.18); }
+.code-header { display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: #13131f; border-bottom: 1px solid #2a2a45; }
+.code-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.code-dot.r { background: #ff5f57; } .code-dot.y { background: #ffbd2e; } .code-dot.g { background: #28ca41; }
+.code-filename { font-family: var(--mono); font-size: 12px; color: #6a6a8a; margin-left: 8px; letter-spacing: .5px; }
+.code-body { background: var(--code-bg); padding: 0; overflow-x: auto; }
+.code-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; line-height: 1.85; }
+.code-table tr:hover { background: #ffffff05; }
+.ln-cell { width: 48px; min-width: 48px; padding: 0 16px 0 18px; text-align: right; color: #3a3a5a; user-select: none; border-right: 1px solid #252540; vertical-align: top; font-size: 11.5px; padding-top: 1px; }
+.code-cell { padding: 0 20px 0 16px; color: var(--code-text); white-space: pre; vertical-align: top; }
+/* first and last row padding */
+.code-table tr:first-child .ln-cell,
+.code-table tr:first-child .code-cell { padding-top: 16px; }
+.code-table tr:last-child .ln-cell,
+.code-table tr:last-child .code-cell  { padding-bottom: 16px; }
+
+/* syntax token colors */
+.t-kw  { color: #c792ea; }           /* keyword */
+.t-cl  { color: #82aaff; }           /* class name */
+.t-fn  { color: #82cfaa; }           /* function/method */
+.t-st  { color: #c3e88d; }           /* string */
+.t-cm  { color: #4a5572; font-style: italic; } /* comment */
+.t-nm  { color: #f78c6c; }           /* number */
+.t-an  { color: #f78c6c; }           /* annotation */
+.t-op  { color: #89ddff; }           /* operator / punctuation accent */
+.t-ty  { color: #ffcb8b; }           /* type */
+
+.output-box { background: #0b0b18; border-radius: 10px; padding: 18px 22px; margin: 12px 0 24px; border-left: 3px solid var(--teal); }
+.output-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; color: var(--teal); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.output-label::before { content: '▶'; font-size: 8px; }
+.output-line { font-family: var(--mono); font-size: 12.5px; color: #5bffa0; line-height: 2; }
+.output-line.info { color: #4ecdc4; }
+.output-line.err  { color: #ff6b6b; }
+
+.uml-wrap { background: var(--cream); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin: 20px 0; }
+.uml-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 16px; }
+.uml-grid { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+.uml-box { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; min-width: 160px; background: #fff; flex: 1; }
+.uml-box-title { padding: 8px 14px; font-family: var(--mono); font-size: 12px; font-weight: 500; background: var(--ink); color: var(--gold); display: flex; justify-content: space-between; align-items: center; }
+.uml-box-title small { font-size: 9px; color: #ffffff50; font-style: italic; }
+.uml-section { border-top: 1px solid var(--border); padding: 8px 14px; }
+.uml-field { font-family: var(--mono); font-size: 11px; line-height: 1.9; color: var(--muted); }
+.vis-pub { color: #2a7d6f; } .vis-pri { color: #c84b31; } .vis-pro { color: #d4a017; }
+
+.callout { display: flex; gap: 16px; padding: 18px 22px; border-radius: 10px; margin: 20px 0; align-items: flex-start; }
+.callout.tip  { background: #e8f6f3; border-left: 4px solid var(--teal); }
+.callout.warn { background: #fdf3e0; border-left: 4px solid var(--gold); }
+.callout.note { background: #eaf0f8; border-left: 4px solid var(--blue); }
+.callout.key  { background: #fdecea; border-left: 4px solid var(--accent); }
+.callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.callout-title { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+.callout.tip  .callout-title { color: var(--teal); }
+.callout.warn .callout-title { color: #b87a00; }
+.callout.note .callout-title { color: var(--blue); }
+.callout.key  .callout-title { color: var(--accent); }
+.callout-body p { font-size: 14px; color: #444; line-height: 1.65; }
+code { font-family: var(--mono); font-size: 12.5px; background: rgba(0,0,0,0.07); padding: 1px 6px; border-radius: 4px; color: var(--accent); }
+
+.compare-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13.5px; }
+.compare-table th { background: var(--ink); color: var(--gold); font-family: var(--mono); font-size: 11px; letter-spacing: 1px; padding: 12px 16px; text-align: left; }
+.compare-table td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: #444; vertical-align: top; }
+.compare-table tr:nth-child(even) td { background: var(--cream); }
+.compare-table td:first-child { font-family: var(--mono); color: var(--accent); font-size: 12px; white-space: nowrap; }
+.tick { color: var(--teal); font-weight: 700; } .cross { color: var(--accent); font-weight: 700; }
+
+.quiz-box { background: var(--ink); color: #fff; border-radius: 12px; padding: 28px 32px; margin: 28px 0; }
+.quiz-label { font-family: var(--mono); font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+.quiz-q { font-family: var(--serif); font-size: 19px; font-weight: 600; line-height: 1.4; margin-bottom: 18px; }
+.quiz-opts { display: flex; flex-direction: column; gap: 10px; }
+.quiz-opt { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-radius: 8px; border: 1px solid #ffffff20; cursor: pointer; font-size: 14px; color: #ffffffaa; background: transparent; text-align: left; transition: all .18s; font-family: var(--sans); }
+.quiz-opt:hover { background: #ffffff0d; border-color: #ffffff40; color: #fff; }
+.quiz-opt .opt-key { width: 26px; height: 26px; border-radius: 6px; background: #ffffff15; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11px; flex-shrink: 0; color: var(--gold); }
+.quiz-opt.correct { background: #1a4a3055; border-color: #2a7d6f; color: #5bffa0; }
+.quiz-opt.wrong   { background: #4a1a1a55; border-color: #c84b31; color: #ff8080; }
+.quiz-opt.correct .opt-key { background: #2a7d6f; color: #fff; }
+.quiz-opt.wrong   .opt-key { background: #c84b31; color: #fff; }
+.quiz-feedback { margin-top: 16px; padding: 12px 16px; border-radius: 8px; font-size: 13.5px; line-height: 1.6; display: none; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.ok { background: #1a4a3088; border: 1px solid #2a7d6f; color: #5bffa0; }
+.quiz-feedback.no { background: #4a1a1a88; border: 1px solid #c84b31; color: #ff8080; }
+.quiz-next { margin-top: 14px; padding: 9px 22px; border-radius: 6px; background: var(--gold); color: var(--ink); border: none; font-family: var(--mono); font-size: 12px; cursor: pointer; display: none; font-weight: 500; transition: opacity .15s; }
+.quiz-next:hover { opacity: 0.85; }
+.quiz-next.show { display: inline-block; }
+
+.chapter-done { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: #e8f6f3; border-radius: 10px; border: 1px solid #b0ddd5; margin-top: 32px; }
+.chapter-done .badge { width: 40px; height: 40px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0; }
+.chapter-done p { font-size: 13px; color: var(--teal); font-family: var(--mono); }
+.chapter-done h4 { font-size: 15px; color: #1a5a4a; font-weight: 500; margin-bottom: 2px; }
+
+.divider { height: 1px; background: var(--border); margin: 36px 0; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 24px 0; }
+.summary-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px; border-top: 4px solid var(--accent); }
+.summary-card.t { border-top-color: var(--teal); } .summary-card.b { border-top-color: var(--blue); } .summary-card.g { border-top-color: var(--gold); }
+.summary-card h4 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.summary-card ul { padding-left: 16px; }
+.summary-card li { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.chapter-body > * { animation: fadeUp .4s ease both; }
+.chapter-body > *:nth-child(2) { animation-delay:.05s; }
+.chapter-body > *:nth-child(3) { animation-delay:.10s; }
+.chapter-body > *:nth-child(4) { animation-delay:.15s; }
+
+@media (max-width: 860px) { #sidebar { display:none; } #main { margin-left:0; } .hero,.chapter-header,.chapter-body { padding:32px 24px; } .chapter-num { font-size:48px; } }
+::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<nav id="sidebar">
+  <div class="sidebar-logo"><h1>OOP <span>Java</span></h1><p>Complete Guide</p></div>
+  <div class="nav-section">Chapters</div>
+  <a href="#ch1" class="nav-link active"><span class="num">01</span> Classes &amp; Objects</a>
+  <a href="#ch2" class="nav-link"><span class="num">02</span> Constructors</a>
+  <a href="#ch3" class="nav-link"><span class="num">03</span> Encapsulation</a>
+  <a href="#ch4" class="nav-link"><span class="num">04</span> Inheritance</a>
+  <a href="#ch5" class="nav-link"><span class="num">05</span> Polymorphism</a>
+  <a href="#ch6" class="nav-link"><span class="num">06</span> Abstraction</a>
+  <a href="#ch7" class="nav-link"><span class="num">07</span> Interfaces</a>
+  <a href="#ch8" class="nav-link"><span class="num">08</span> Summary &amp; Quiz</a>
+  <div class="nav-progress">
+    <p>Progress</p>
+    <div class="prog-bar"><div class="prog-fill" id="sideProgress" style="width:0%"></div></div>
+  </div>
+</nav>
+
+<main id="main">
+
+<section class="hero">
+  <div class="hero-tag">Complete Learning Document</div>
+  <h2>Object-Oriented<br><em>Programming</em> in Java</h2>
+  <p>A complete, interactive guide covering every OOP concept — from classes to interfaces — with formatted code, diagrams, and quizzes.</p>
+  <div class="hero-pills">
+    <span class="hero-pill h">8 Chapters</span>
+    <span class="hero-pill">Formatted Code</span>
+    <span class="hero-pill">UML Diagrams</span>
+    <span class="hero-pill">Chapter Quizzes</span>
+    <span class="hero-pill">Beginner → Advanced</span>
+  </div>
+</section>
+
+<!-- ══════════════ CH 1 ══════════════ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">01</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Foundation</div>
+      <div class="chapter-title">Classes &amp; <span class="accent">Objects</span></div>
+      <div class="chapter-desc">Understand the blueprint-instance relationship that forms the heart of OOP.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="concept-card" data-icon="🧱">
+      <h3>What is a Class?</h3>
+      <p>A <strong>class</strong> is a blueprint or template that defines the structure and behavior of objects. It specifies what data (fields) an object will hold and what actions (methods) it can perform. Think of a class like a recipe — the recipe itself isn't food, but you use it to create food.</p>
+      <span class="kw-badge">class</span><span class="kw-badge">fields</span><span class="kw-badge">methods</span>
+    </div>
+    <div class="concept-card" data-icon="📦">
+      <h3>What is an Object?</h3>
+      <p>An <strong>object</strong> is a real, concrete instance created from a class using the <code>new</code> keyword. Each object has its own copy of the fields (state) but shares the class's methods. Multiple objects can be created from the same class, each with different data.</p>
+      <span class="kw-badge">new</span><span class="kw-badge">instance</span><span class="kw-badge">state</span>
+    </div>
+    <div id="code-ch1"></div>
+    <div class="output-box">
+      <div class="output-label">Output</div>
+      <div class="output-line">Bruno says: Woof!</div>
+      <div class="output-line">Name: Coco, Breed: Poodle, Age: 5</div>
+    </div>
+    <div class="uml-wrap">
+      <div class="uml-label">UML Class Diagram</div>
+      <div class="uml-grid">
+        <div class="uml-box">
+          <div class="uml-box-title">Dog <small>«class»</small></div>
+          <div class="uml-section">
+            <div class="uml-field"><span class="vis-pub">+</span> name : String</div>
+            <div class="uml-field"><span class="vis-pub">+</span> breed : String</div>
+            <div class="uml-field"><span class="vis-pub">+</span> age : int</div>
+          </div>
+          <div class="uml-section">
+            <div class="uml-field"><span class="vis-pub">+</span> bark() : void</div>
+            <div class="uml-field"><span class="vis-pub">+</span> displayInfo() : void</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 8px;font-family:var(--mono);font-size:10px;color:var(--muted)">→ instantiates</div>
+        <div style="display:flex;flex-direction:column;gap:10px;flex:1">
+          <div class="uml-box"><div class="uml-box-title" style="background:var(--teal)">dog1 : Dog <small>«object»</small></div><div class="uml-section"><div class="uml-field">name="Bruno", breed="Labrador", age=3</div></div></div>
+          <div class="uml-box"><div class="uml-box-title" style="background:var(--teal)">dog2 : Dog <small>«object»</small></div><div class="uml-section"><div class="uml-field">name="Coco", breed="Poodle", age=5</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body"><div class="callout-title">Key Insight</div><p>A class is defined once but can create unlimited objects. Changing <code>dog1.name</code> never affects <code>dog2.name</code> — each object owns its data.</p></div></div>
+    <div class="quiz-box" id="q1">
+      <div class="quiz-label">Chapter Quiz</div>
+      <div class="quiz-q">What is the correct way to create an object of class <code style="color:var(--gold)">Car</code>?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q1',0,2)"><span class="opt-key">A</span> Car c = Car();</button>
+        <button class="quiz-opt" onclick="answer('q1',1,2)"><span class="opt-key">B</span> Car c = create Car();</button>
+        <button class="quiz-opt" onclick="answer('q1',2,2)"><span class="opt-key">C</span> Car c = new Car();</button>
+        <button class="quiz-opt" onclick="answer('q1',3,2)"><span class="opt-key">D</span> new Car c = Car();</button>
+      </div>
+      <div class="quiz-feedback" id="q1-fb"></div>
+      <button class="quiz-next" id="q1-next" onclick="scrollNext('ch2')">Next Chapter →</button>
+    </div>
+    <div class="chapter-done"><div class="badge">✓</div><div><h4>Chapter 1 Complete</h4><p>Classes and objects understood. Next: Constructors.</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ CH 2 ══════════════ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">02</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Initialization</div>
+      <div class="chapter-title"><span class="accent">Constructors</span></div>
+      <div class="chapter-desc">Special methods that initialize objects when they are created with new.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="concept-card" data-icon="🏗️">
+      <h3>What is a Constructor?</h3>
+      <p>A <strong>constructor</strong> is a special method called automatically when you use <code>new</code> to create an object. It has the same name as the class and no return type. Its job is to set up the object's initial state. Java provides a default no-arg constructor if you write none.</p>
+      <span class="kw-badge">Same name as class</span><span class="kw-badge">No return type</span><span class="kw-badge">this keyword</span>
+    </div>
+    <div id="code-ch2"></div>
+    <div class="output-box">
+      <div class="output-label">Output</div>
+      <div class="output-line">Unknown | Age: 0 | City: Unknown</div>
+      <div class="output-line">Raj | Age: 22 | City: Delhi</div>
+      <div class="output-line">Priya | Age: 25 | City: Mumbai</div>
+    </div>
+    <div class="callout note"><div class="callout-icon">📌</div><div class="callout-body"><div class="callout-title">this() vs this.</div><p><code>this.name</code> refers to the current object's field. <code>this(name, age)</code> calls another constructor in the same class — must be the very first statement.</p></div></div>
+    <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><div class="callout-title">Copy Constructor</div><p>Java has no built-in copy constructor (unlike C++). You can write one manually: <code>Person(Person other) { this.name = other.name; }</code></p></div></div>
+    <div class="quiz-box" id="q2">
+      <div class="quiz-label">Chapter Quiz</div>
+      <div class="quiz-q">Which statement about Java constructors is TRUE?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q2',0,1)"><span class="opt-key">A</span> A constructor must have a return type like void</button>
+        <button class="quiz-opt" onclick="answer('q2',1,1)"><span class="opt-key">B</span> A class can have multiple constructors with different parameters</button>
+        <button class="quiz-opt" onclick="answer('q2',2,1)"><span class="opt-key">C</span> A constructor can have a different name from its class</button>
+        <button class="quiz-opt" onclick="answer('q2',3,1)"><span class="opt-key">D</span> this() can be used anywhere inside the constructor body</button>
+      </div>
+      <div class="quiz-feedback" id="q2-fb"></div>
+      <button class="quiz-next" id="q2-next" onclick="scrollNext('ch3')">Next Chapter →</button>
+    </div>
+    <div class="chapter-done"><div class="badge">✓</div><div><h4>Chapter 2 Complete</h4><p>Constructors mastered. Next: Encapsulation.</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ CH 3 ══════════════ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">03</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Pillar 1</div>
+      <div class="chapter-title"><span class="accent">Encapsulation</span></div>
+      <div class="chapter-desc">Protect data by hiding it inside the class and controlling access through methods.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="concept-card" data-icon="🔒">
+      <h3>What is Encapsulation?</h3>
+      <p><strong>Encapsulation</strong> bundles data (fields) and the methods that operate on that data into one unit, and restricts direct access to the data from outside. Fields are made <code>private</code> and accessed through <code>public</code> getter/setter methods, allowing validation before any change is applied.</p>
+    </div>
+    <table class="compare-table">
+      <tr><th>Modifier</th><th>Same Class</th><th>Same Package</th><th>Subclass</th><th>Everywhere</th></tr>
+      <tr><td>private</td><td class="tick">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>default</td><td class="tick">✓</td><td class="tick">✓</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+      <tr><td>protected</td><td class="tick">✓</td><td class="tick">✓</td><td class="tick">✓</td><td class="cross">✗</td></tr>
+      <tr><td>public</td><td class="tick">✓</td><td class="tick">✓</td><td class="tick">✓</td><td class="tick">✓</td></tr>
+    </table>
+    <div id="code-ch3"></div>
+    <div class="callout key"><div class="callout-icon">🔑</div><div class="callout-body"><div class="callout-title">Why Encapsulation Matters</div><p>Without encapsulation anyone can set <code>balance = -99999</code> directly. With it, every change goes through validated methods, so the data stays consistent and correct.</p></div></div>
+    <div class="quiz-box" id="q3">
+      <div class="quiz-label">Chapter Quiz</div>
+      <div class="quiz-q">Which access modifier makes a field accessible ONLY within the class it is declared in?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q3',0,0)"><span class="opt-key">A</span> private</button>
+        <button class="quiz-opt" onclick="answer('q3',1,0)"><span class="opt-key">B</span> protected</button>
+        <button class="quiz-opt" onclick="answer('q3',2,0)"><span class="opt-key">C</span> public</button>
+        <button class="quiz-opt" onclick="answer('q3',3,0)"><span class="opt-key">D</span> default</button>
+      </div>
+      <div class="quiz-feedback" id="q3-fb"></div>
+      <button class="quiz-next" id="q3-next" onclick="scrollNext('ch4')">Next Chapter →</button>
+    </div>
+    <div class="chapter-done"><div class="badge">✓</div><div><h4>Chapter 3 Complete</h4><p>Encapsulation learned. Next: Inheritance.</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ CH 4 ══════════════ -->
+<section class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">04</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Pillar 2</div>
+      <div class="chapter-title"><span class="accent">Inheritance</span></div>
+      <div class="chapter-desc">Reuse and extend existing classes using the extends keyword.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="concept-card" data-icon="🧬">
+      <h3>What is Inheritance?</h3>
+      <p><strong>Inheritance</strong> lets a child class (subclass) acquire fields and methods from a parent class (superclass) via <code>extends</code>. It promotes code reuse and creates an IS-A relationship. Java allows only <em>single inheritance</em> — one parent class — but a class can implement multiple interfaces.</p>
+      <span class="kw-badge">extends</span><span class="kw-badge">super</span><span class="kw-badge">IS-A relationship</span>
+    </div>
+    <div id="code-ch4"></div>
+    <div class="output-box">
+      <div class="output-label">Output</div>
+      <div class="output-line">Rex is eating</div>
+      <div class="output-line">Rex barks!</div>
+      <div class="output-line">Rex fetches the ball!</div>
+    </div>
+    <div class="uml-wrap">
+      <div class="uml-label">Inheritance UML</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div class="uml-box" style="width:220px">
+          <div class="uml-box-title">Animal <small>«superclass»</small></div>
+          <div class="uml-section"><div class="uml-field"><span class="vis-pub">+</span> name, age</div></div>
+          <div class="uml-section"><div class="uml-field"><span class="vis-pub">+</span> eat()  breathe()  sleep()</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">△ extends</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+          <div class="uml-box" style="min-width:140px"><div class="uml-box-title" style="background:var(--teal)">Dog</div><div class="uml-section"><div class="uml-field">+ breed</div><div class="uml-field">+ bark()  fetch()</div></div></div>
+          <div class="uml-box" style="min-width:140px"><div class="uml-box-title" style="background:var(--teal)">Bird</div><div class="uml-section"><div class="uml-field">+ canFly : boolean</div><div class="uml-field">+ chirp()</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body"><div class="callout-title">super keyword</div><p><code>super()</code> calls the parent constructor — must be the first line. <code>super.method()</code> calls a parent method from inside an overriding child method.</p></div></div>
+    <div class="quiz-box" id="q4">
+      <div class="quiz-label">Chapter Quiz</div>
+      <div class="quiz-q">In Java, how many parent classes can a class directly extend?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q4',0,1)"><span class="opt-key">A</span> Unlimited</button>
+        <button class="quiz-opt" onclick="answer('q4',1,1)"><span class="opt-key">B</span> Only one</button>
+        <button class="quiz-opt" onclick="answer('q4',2,1)"><span class="opt-key">C</span> Two</button>
+        <button class="quiz-opt" onclick="answer('q4',3,1)"><span class="opt-key">D</span> Three</button>
+      </div>
+      <div class="quiz-feedback" id="q4-fb"></div>
+      <button class="quiz-next" id="q4-next" onclick="scrollNext('ch5')">Next Chapter →</button>
+    </div>
+    <div class="chapter-done"><div class="badge">✓</div><div><h4>Chapter 4 Complete</h4><p>Inheritance conquered. Next: Polymorphism.</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ CH 5 ══════════════ -->
+<section class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">05</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Pillar 3</div>
+      <div class="chapter-title"><span class="accent">Polymorphism</span></div>
+      <div class="chapter-desc">One interface, many forms — method overriding and overloading.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="concept-card" data-icon="🎭">
+      <h3>What is Polymorphism?</h3>
+      <p><strong>Polymorphism</strong> means "many forms." Java provides it in two ways: <strong>compile-time</strong> (method overloading — compiler picks which method) and <strong>runtime</strong> (method overriding — JVM picks which method based on the actual object's type at execution time).</p>
+      <span class="kw-badge">@Override</span><span class="kw-badge">Overloading</span><span class="kw-badge">Runtime dispatch</span>
+    </div>
+    <div id="code-ch5"></div>
+    <div class="output-box">
+      <div class="output-label">Output</div>
+      <div class="output-line">Drawing Circle ⭕</div>
+      <div class="output-line">Area = 78.54</div>
+      <div class="output-line">Drawing Rectangle ▭</div>
+      <div class="output-line">Area = 24.0</div>
+      <div class="output-line">5</div>
+      <div class="output-line">Hello, World!</div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Feature</th><th>Overloading</th><th>Overriding</th></tr>
+      <tr><td>Where</td><td>Same class</td><td>Subclass</td></tr>
+      <tr><td>Parameters</td><td>Must differ</td><td>Must be same</td></tr>
+      <tr><td>Resolved at</td><td>Compile time</td><td>Runtime (JVM)</td></tr>
+      <tr><td>Annotation</td><td>Not needed</td><td>@Override recommended</td></tr>
+    </table>
+    <div class="quiz-box" id="q5">
+      <div class="quiz-label">Chapter Quiz</div>
+      <div class="quiz-q">A parent reference holds a child object. Which method runs?<br><small style="color:#ffffff50;font-family:var(--mono);font-size:12px">Animal a = new Dog();  a.sound();</small></div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q5',0,2)"><span class="opt-key">A</span> Animal's sound() — always</button>
+        <button class="quiz-opt" onclick="answer('q5',1,2)"><span class="opt-key">B</span> Compiler error</button>
+        <button class="quiz-opt" onclick="answer('q5',2,2)"><span class="opt-key">C</span> Dog's sound() — decided at runtime</button>
+        <button class="quiz-opt" onclick="answer('q5',3,2)"><span class="opt-key">D</span> Both methods run together</button>
+      </div>
+      <div class="quiz-feedback" id="q5-fb"></div>
+      <button class="quiz-next" id="q5-next" onclick="scrollNext('ch6')">Next Chapter →</button>
+    </div>
+    <div class="chapter-done"><div class="badge">✓</div><div><h4>Chapter 5 Complete</h4><p>Polymorphism understood. Next: Abstraction.</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ CH 6 ══════════════ -->
+<section class="chapter" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-num">06</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Pillar 4</div>
+      <div class="chapter-title"><span class="accent">Abstraction</span></div>
+      <div class="chapter-desc">Hide complexity. Show only the essential using abstract classes.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="concept-card" data-icon="🌫️">
+      <h3>What is Abstraction?</h3>
+      <p><strong>Abstraction</strong> hides internal implementation details and exposes only what is necessary. Java provides it via <strong>abstract classes</strong> (partial abstraction — can mix abstract and concrete methods) and <strong>interfaces</strong> (full abstraction). An abstract class cannot be instantiated directly.</p>
+      <span class="kw-badge">abstract</span><span class="kw-badge">cannot instantiate</span><span class="kw-badge">must override</span>
+    </div>
+    <div id="code-ch6"></div>
+    <div class="output-box">
+      <div class="output-label">Output</div>
+      <div class="output-line info">// new Car("Toyota")</div>
+      <div class="output-line">Brand: Toyota</div>
+      <div class="output-line">Toyota car started with key 🔑</div>
+      <div class="output-line">Fuel: Petrol/Diesel</div>
+      <div class="output-line info">// new ElectricCar("Tesla")</div>
+      <div class="output-line">Tesla EV started silently 🤫</div>
+      <div class="output-line">Fuel: Electric ⚡</div>
+    </div>
+    <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><div class="callout-title">Abstract class rules</div><p>If a class has even ONE abstract method the class must be declared <code>abstract</code>. Every subclass must implement all abstract methods — or also be declared abstract.</p></div></div>
+    <div class="quiz-box" id="q6">
+      <div class="quiz-label">Chapter Quiz</div>
+      <div class="quiz-q">Which statement about abstract classes is FALSE?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q6',0,3)"><span class="opt-key">A</span> Cannot be instantiated directly</button>
+        <button class="quiz-opt" onclick="answer('q6',1,3)"><span class="opt-key">B</span> Can have both abstract and concrete methods</button>
+        <button class="quiz-opt" onclick="answer('q6',2,3)"><span class="opt-key">C</span> Subclass must implement all abstract methods or itself be abstract</button>
+        <button class="quiz-opt" onclick="answer('q6',3,3)"><span class="opt-key">D</span> An abstract class can extend multiple classes</button>
+      </div>
+      <div class="quiz-feedback" id="q6-fb"></div>
+      <button class="quiz-next" id="q6-next" onclick="scrollNext('ch7')">Next Chapter →</button>
+    </div>
+    <div class="chapter-done"><div class="badge">✓</div><div><h4>Chapter 6 Complete</h4><p>Abstraction mastered. Final: Interfaces.</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ CH 7 ══════════════ -->
+<section class="chapter" id="ch7">
+  <div class="chapter-header">
+    <div class="chapter-num">07</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Advanced Abstraction</div>
+      <div class="chapter-title"><span class="accent">Interfaces</span></div>
+      <div class="chapter-desc">Pure contracts — the key to multiple inheritance and flexible design.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="concept-card" data-icon="📋">
+      <h3>What is an Interface?</h3>
+      <p>An <strong>interface</strong> is a completely abstract type defining a contract — method signatures that implementing classes must provide. Unlike abstract classes, a class can <code>implement</code> multiple interfaces. All methods are implicitly <code>public abstract</code> and all fields are <code>public static final</code>.</p>
+      <span class="kw-badge">interface</span><span class="kw-badge">implements</span><span class="kw-badge">Multiple allowed</span>
+    </div>
+    <div id="code-ch7"></div>
+    <div class="output-box">
+      <div class="output-label">Output</div>
+      <div class="output-line">Donald is flying 🦆</div>
+      <div class="output-line">Eagle soars high 🦅</div>
+      <div class="output-line">Donald is swimming 🌊</div>
+      <div class="output-line">Landing safely...</div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
+      <tr><td>Keyword</td><td>abstract class</td><td>interface</td></tr>
+      <tr><td>Multiple?</td><td>Extend ONE only</td><td>Implement MANY</td></tr>
+      <tr><td>Constructor</td><td class="tick">Yes</td><td class="cross">No</td></tr>
+      <tr><td>Concrete methods</td><td class="tick">Yes</td><td>default/static only (Java 8+)</td></tr>
+      <tr><td>Best used for</td><td>IS-A, shared code</td><td>CAN-DO capability</td></tr>
+    </table>
+    <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body"><div class="callout-title">Rule of thumb</div><p>Use <strong>abstract class</strong> when classes share implementation (e.g., all animals breathe). Use <strong>interface</strong> for capabilities that unrelated classes might share (both <code>Duck</code> and <code>Airplane</code> can fly).</p></div></div>
+    <div class="quiz-box" id="q7">
+      <div class="quiz-label">Chapter Quiz</div>
+      <div class="quiz-q">How many interfaces can a Java class implement?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q7',0,3)"><span class="opt-key">A</span> Only one</button>
+        <button class="quiz-opt" onclick="answer('q7',1,3)"><span class="opt-key">B</span> Maximum two</button>
+        <button class="quiz-opt" onclick="answer('q7',2,3)"><span class="opt-key">C</span> Only as many as it extends</button>
+        <button class="quiz-opt" onclick="answer('q7',3,3)"><span class="opt-key">D</span> Multiple — no limit</button>
+      </div>
+      <div class="quiz-feedback" id="q7-fb"></div>
+      <button class="quiz-next" id="q7-next" onclick="scrollNext('ch8')">Final Summary →</button>
+    </div>
+    <div class="chapter-done"><div class="badge">✓</div><div><h4>Chapter 7 Complete</h4><p>All OOP pillars covered! Head to the final summary.</p></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ CH 8 ══════════════ -->
+<section class="chapter" id="ch8">
+  <div class="chapter-header">
+    <div class="chapter-num">08</div>
+    <div class="chapter-meta">
+      <div class="chapter-tag">Review</div>
+      <div class="chapter-title">Summary &amp; <span class="accent">Final Quiz</span></div>
+      <div class="chapter-desc">A complete overview plus a final challenge question.</div>
+    </div>
+  </div>
+  <div class="chapter-body">
+    <div class="summary-grid">
+      <div class="summary-card"><h4>🧱 Classes & Objects</h4><ul><li>Class = blueprint</li><li>Object = instance via <code>new</code></li><li>Fields = state, Methods = behavior</li></ul></div>
+      <div class="summary-card"><h4>🏗️ Constructors</h4><ul><li>Same name, no return type</li><li>Can be overloaded</li><li><code>this()</code> chains constructors</li></ul></div>
+      <div class="summary-card t"><h4>🔒 Encapsulation</h4><ul><li>private fields</li><li>public getters/setters</li><li>Validation in setters</li></ul></div>
+      <div class="summary-card t"><h4>🧬 Inheritance</h4><ul><li><code>extends</code> keyword</li><li>Single inheritance only</li><li><code>super</code> calls parent</li></ul></div>
+      <div class="summary-card b"><h4>🎭 Polymorphism</h4><ul><li>Override = runtime</li><li>Overload = compile-time</li><li><code>@Override</code> annotation</li></ul></div>
+      <div class="summary-card b"><h4>🌫️ Abstraction</h4><ul><li><code>abstract class</code> = partial</li><li><code>interface</code> = full contract</li><li>Implement multiple interfaces</li></ul></div>
+    </div>
+    <div class="divider"></div>
+    <div style="font-family:var(--serif);font-size:22px;font-weight:600;margin-bottom:20px;">Final Challenge</div>
+    <div class="quiz-box" id="q8">
+      <div class="quiz-label">Final Question</div>
+      <div class="quiz-q">Which OOP concept does the following best demonstrate?<br><small style="font-family:var(--mono);font-size:12px;color:#ffffff50;line-height:2">List&lt;Animal&gt; list = new ArrayList&lt;&gt;();<br>list.add(new Dog());  list.add(new Cat());<br>for (Animal a : list)  a.sound();</small></div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="answer('q8',0,2)"><span class="opt-key">A</span> Encapsulation — data is hidden</button>
+        <button class="quiz-opt" onclick="answer('q8',1,2)"><span class="opt-key">B</span> Abstraction — using an abstract class</button>
+        <button class="quiz-opt" onclick="answer('q8',2,2)"><span class="opt-key">C</span> Polymorphism — same call, different runtime behavior</button>
+        <button class="quiz-opt" onclick="answer('q8',3,2)"><span class="opt-key">D</span> Inheritance — Dog extends Animal</button>
+      </div>
+      <div class="quiz-feedback" id="q8-fb"></div>
+      <button class="quiz-next" id="q8-next" onclick="showCompletion()">See Results 🎉</button>
+    </div>
+    <div id="completion" style="display:none;margin-top:28px;background:linear-gradient(135deg,var(--ink),#1a2a1a);border-radius:14px;padding:36px;text-align:center;color:#fff">
+      <div style="font-size:48px;margin-bottom:12px">🏆</div>
+      <div style="font-family:var(--serif);font-size:28px;font-weight:900;color:var(--gold);margin-bottom:8px">Congratulations!</div>
+      <div style="font-size:15px;color:#ffffff80;margin-bottom:24px;line-height:1.7">You have completed the full OOP in Java guide.<br>All 4 pillars: Encapsulation, Inheritance, Polymorphism &amp; Abstraction.</div>
+      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
+        <div style="background:#ffffff12;border-radius:10px;padding:16px 24px;font-family:var(--mono);font-size:13px"><div style="color:var(--gold);font-size:24px;font-weight:700" id="score-display">—</div><div style="color:#ffffff50;font-size:10px;margin-top:4px">Quiz Score</div></div>
+        <div style="background:#ffffff12;border-radius:10px;padding:16px 24px;font-family:var(--mono);font-size:13px"><div style="color:#5bffa0;font-size:24px;font-weight:700">8</div><div style="color:#ffffff50;font-size:10px;margin-top:4px">Chapters Done</div></div>
+        <div style="background:#ffffff12;border-radius:10px;padding:16px 24px;font-family:var(--mono);font-size:13px"><div style="color:#82aaff;font-size:24px;font-weight:700">4</div><div style="color:#ffffff50;font-size:10px;margin-top:4px">OOP Pillars</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// ─────────────────────────────────────────────────────────────────
+// SYNTAX HIGHLIGHTER
+// Each code sample is stored as a plain string.
+// highlight() tokenizes it and renders a table with line numbers.
+// ─────────────────────────────────────────────────────────────────
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function highlight(raw) {
+  // Token patterns — order matters
+  const rules = [
+    [/\/\/[^\n]*/g,                                      'cm'],   // single-line comment
+    [/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g,            'st'],   // string / char literal
+    [/\b(public|private|protected|static|final|abstract|class|interface|extends|implements|new|return|void|this|super|if|else|for|while|do|switch|case|break|continue|throws|throw|try|catch|finally|import|package|enum)\b/g, 'kw'],
+    [/@\w+/g,                                            'an'],   // annotation
+    [/\b(String|int|double|float|long|boolean|char|byte|short|var|List|ArrayList|Map|Set)\b/g, 'ty'],
+    [/\b([A-Z][a-zA-Z0-9_]*)\b/g,                       'cl'],   // ClassName (CamelCase)
+    [/\b([a-z][a-zA-Z0-9_]*)\s*(?=\()/g,               'fn'],   // methodName(
+    [/\b\d+(\.\d+)?\b/g,                                'nm'],   // number
+  ];
+
+  const lines = raw.split('\n');
+  let html = '<table class="code-table">';
+  lines.forEach((line, i) => {
+    // Apply highlights: escape first, then inject spans
+    let out = esc(line);
+    // Re-run tokenization on the raw line (not escaped) to get positions
+    out = tokenizeLine(line);
+    html += `<tr><td class="ln-cell">${i + 1}</td><td class="code-cell">${out}</td></tr>`;
+  });
+  return html + '</table>';
+}
+
+function tokenizeLine(line) {
+  // Build a list of {start, end, cls} token spans, then render
+  const tokens = [];
+
+  const rules = [
+    { re: /\/\/.*$/,                                                         cls: 'cm'  },
+    { re: /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/,                            cls: 'st'  },
+    { re: /\b(public|private|protected|static|final|abstract|class|interface|extends|implements|new|return|void|this|super|if|else|for|while|do|switch|case|break|continue|throws|throw|try|catch|finally|import|package|enum)\b/, cls: 'kw' },
+    { re: /@\w+/,                                                            cls: 'an'  },
+    { re: /\b(String|int|double|float|long|boolean|char|byte|short|var|List|ArrayList|Map|Set|Math|System)\b/, cls: 'ty' },
+    { re: /\b[A-Z][a-zA-Z0-9_]*\b/,                                        cls: 'cl'  },
+    { re: /\b[a-z_][a-zA-Z0-9_]*(?=\s*\()/,                               cls: 'fn'  },
+    { re: /\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?[fFdDlL]?\b/,                  cls: 'nm'  },
+  ];
+
+  // We'll do a greedy left-to-right single pass
+  let result = '';
+  let i = 0;
+  while (i < line.length) {
+    let matched = false;
+    for (const rule of rules) {
+      rule.re.lastIndex = 0;
+      const m = rule.re.exec(line.slice(i));
+      if (m && m.index === 0) {
+        result += `<span class="t-${rule.cls}">${esc(m[0])}</span>`;
+        i += m[0].length;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      result += esc(line[i]);
+      i++;
+    }
+  }
+  return result;
+}
+
+function renderCode(containerId, filename, rawCode) {
+  const wrap = document.createElement('div');
+  wrap.className = 'code-wrap';
+  wrap.innerHTML = `
+    <div class="code-header">
+      <div class="code-dot r"></div>
+      <div class="code-dot y"></div>
+      <div class="code-dot g"></div>
+      <span class="code-filename">${esc(filename)}</span>
+    </div>
+    <div class="code-body">${highlight(rawCode)}</div>`;
+  document.getElementById(containerId).appendChild(wrap);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// CODE SAMPLES  (plain text — just write normal Java)
+// ─────────────────────────────────────────────────────────────────
+
+const codes = {
+
+ch1: [`Dog.java`, `
+// Class definition — the blueprint
+public class Dog {
+
+    // Fields: data that every Dog object holds
+    String name;
+    String breed;
+    int    age;
+
+    // Method: behaviour every Dog can perform
+    void bark() {
+        System.out.println(name + " says: Woof!");
+    }
+
+    void displayInfo() {
+        System.out.println("Name: "  + name  +
+                           ", Breed: " + breed +
+                           ", Age: "  + age);
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // Create two separate objects from the same class
+        Dog dog1 = new Dog();
+        dog1.name  = "Bruno";
+        dog1.breed = "Labrador";
+        dog1.age   = 3;
+
+        Dog dog2 = new Dog();
+        dog2.name  = "Coco";
+        dog2.breed = "Poodle";
+        dog2.age   = 5;
+
+        dog1.bark();          // Bruno says: Woof!
+        dog2.displayInfo();   // Name: Coco, Breed: Poodle, Age: 5
+    }
+}
+`.trim()],
+
+ch2: [`Person.java — Constructor Overloading`, `
+public class Person {
+
+    String name;
+    int    age;
+    String city;
+
+    // 1. Default constructor — no arguments
+    public Person() {
+        name = "Unknown";
+        age  = 0;
+        city = "Unknown";
+    }
+
+    // 2. Parameterized constructor
+    public Person(String name, int age) {
+        this.name = name;   // 'this' = current object's field
+        this.age  = age;
+        this.city = "Delhi";
+    }
+
+    // 3. Full constructor — chains to constructor #2
+    public Person(String name, int age, String city) {
+        this(name, age);    // calls the 2-arg constructor above
+        this.city = city;   // then overrides city
+    }
+
+    void display() {
+        System.out.println(name + " | Age: " + age + " | City: " + city);
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        Person p1 = new Person();                       // default
+        Person p2 = new Person("Raj", 22);              // 2-arg
+        Person p3 = new Person("Priya", 25, "Mumbai");  // full
+
+        p1.display();   // Unknown | Age: 0 | City: Unknown
+        p2.display();   // Raj | Age: 22 | City: Delhi
+        p3.display();   // Priya | Age: 25 | City: Mumbai
+    }
+}
+`.trim()],
+
+ch3: [`BankAccount.java — Encapsulation`, `
+public class BankAccount {
+
+    // private fields — hidden from the outside world
+    private String owner;
+    private double balance;
+
+    // Constructor
+    public BankAccount(String owner, double initialBalance) {
+        this.owner   = owner;
+        this.balance = initialBalance;
+    }
+
+    // Getter — read-only controlled access
+    public String getOwner()   { return owner;   }
+    public double getBalance() { return balance; }
+
+    // Setter with validation — prevents invalid data
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited: Rs." + amount);
+        } else {
+            System.out.println("Invalid deposit amount!");
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrawn: Rs." + amount);
+        } else {
+            System.out.println("Insufficient funds or invalid amount!");
+        }
+    }
+}
+
+// Usage
+// account.balance = -500;   ERROR — balance is private
+// account.deposit(500);     OK    — goes through validation
+`.trim()],
+
+ch4: [`Animal.java — Inheritance`, `
+// Parent class (Superclass)
+class Animal {
+
+    String name;
+    int    age;
+
+    public Animal(String name, int age) {
+        this.name = name;
+        this.age  = age;
+    }
+
+    void eat()     { System.out.println(name + " is eating");    }
+    void breathe() { System.out.println(name + " is breathing"); }
+    void sleep()   { System.out.println(name + " is sleeping");  }
+}
+
+// Child class — inherits everything from Animal, adds own features
+class Dog extends Animal {
+
+    String breed;
+
+    public Dog(String name, int age, String breed) {
+        super(name, age);   // call the parent constructor first
+        this.breed = breed;
+    }
+
+    void bark()  { System.out.println(name + " barks!");              }
+    void fetch() { System.out.println(name + " fetches the ball!");   }
+}
+
+// Another child class
+class Bird extends Animal {
+
+    boolean canFly;
+
+    public Bird(String name, int age, boolean canFly) {
+        super(name, age);
+        this.canFly = canFly;
+    }
+
+    void chirp() { System.out.println(name + " chirps!"); }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        Dog d = new Dog("Rex", 4, "German Shepherd");
+
+        d.eat();    // inherited from Animal
+        d.bark();   // Dog's own method
+        d.fetch();  // Dog's own method
+    }
+}
+`.trim()],
+
+ch5: [`Polymorphism.java — Override + Overload`, `
+// ── RUNTIME POLYMORPHISM: Method Overriding ──────────────────────
+
+class Shape {
+    void   draw() { System.out.println("Drawing a shape"); }
+    double area() { return 0; }
+}
+
+class Circle extends Shape {
+    double radius;
+
+    Circle(double r) { this.radius = r; }
+
+    @Override
+    void draw() {
+        System.out.println("Drawing Circle \u2B55");
+    }
+
+    @Override
+    double area() {
+        return Math.PI * radius * radius;
+    }
+}
+
+class Rectangle extends Shape {
+    double width, height;
+
+    Rectangle(double w, double h) { this.width = w; this.height = h; }
+
+    @Override
+    void draw() {
+        System.out.println("Drawing Rectangle \u25AD");
+    }
+
+    @Override
+    double area() {
+        return width * height;
+    }
+}
+
+// ── COMPILE-TIME POLYMORPHISM: Method Overloading ─────────────────
+
+class Calculator {
+    int    add(int a, int b)             { return a + b; }
+    double add(double a, double b)       { return a + b; }
+    int    add(int a, int b, int c)      { return a + b + c; }
+    String add(String a, String b)       { return a + b; }
+}
+
+// ── MAIN ──────────────────────────────────────────────────────────
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // Upcasting: Shape reference, but actual object decides method
+        Shape[] shapes = { new Circle(5), new Rectangle(4, 6) };
+
+        for (Shape s : shapes) {
+            s.draw();
+            System.out.printf("Area = %.2f%n", s.area());
+        }
+
+        Calculator c = new Calculator();
+        System.out.println(c.add(2, 3));             // int version -> 5
+        System.out.println(c.add("Hello, ", "World!")); // String version
+    }
+}
+`.trim()],
+
+ch6: [`AbstractVehicle.java — Abstraction`, `
+// Abstract class — cannot be instantiated directly
+abstract class Vehicle {
+
+    protected String brand;
+    protected int    speed;
+
+    public Vehicle(String brand) {
+        this.brand = brand;
+    }
+
+    // Abstract methods — subclass MUST implement these
+    abstract void fuelType();
+    abstract void start();
+
+    // Concrete method — shared by all vehicles
+    void displayBrand() {
+        System.out.println("Brand: " + brand);
+    }
+
+    void stop() {
+        System.out.println(brand + " stopped.");
+    }
+}
+
+// Concrete subclass 1 — provides all abstract method bodies
+class Car extends Vehicle {
+
+    public Car(String brand) { super(brand); }
+
+    @Override
+    void fuelType() {
+        System.out.println("Fuel: Petrol / Diesel");
+    }
+
+    @Override
+    void start() {
+        System.out.println(brand + " car started with key \uD83D\uDD11");
+    }
+}
+
+// Concrete subclass 2
+class ElectricCar extends Vehicle {
+
+    public ElectricCar(String brand) { super(brand); }
+
+    @Override
+    void fuelType() {
+        System.out.println("Fuel: Electric \u26A1");
+    }
+
+    @Override
+    void start() {
+        System.out.println(brand + " EV started silently \uD83E\uDD2B");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Vehicle v = new Vehicle("X");   ERROR — abstract class!
+
+        Car car = new Car("Toyota");
+        car.displayBrand();   // Brand: Toyota
+        car.start();          // Toyota car started with key 🔑
+        car.fuelType();       // Fuel: Petrol / Diesel
+
+        ElectricCar ev = new ElectricCar("Tesla");
+        ev.start();           // Tesla EV started silently 🤫
+        ev.fuelType();        // Fuel: Electric ⚡
+    }
+}
+`.trim()],
+
+ch7: [`Interfaces.java`, `
+// Interfaces — pure contracts (no state, no constructors)
+
+interface Flyable {
+    void fly();                                     // abstract
+    default void land() {                           // Java 8+ default method
+        System.out.println("Landing safely...");
+    }
+}
+
+interface Swimmable {
+    void swim();
+}
+
+interface Runnable {
+    void run();
+}
+
+// A class CAN implement multiple interfaces at once
+class Duck implements Flyable, Swimmable, Runnable {
+
+    String name;
+
+    Duck(String name) { this.name = name; }
+
+    @Override public void fly()  { System.out.println(name + " is flying \uD83E\uDD86"); }
+    @Override public void swim() { System.out.println(name + " is swimming \uD83C\uDF0A"); }
+    @Override public void run()  { System.out.println(name + " is running \uD83C\uDFC3"); }
+}
+
+// Eagle flies but does not swim
+class Eagle implements Flyable {
+    @Override
+    public void fly() {
+        System.out.println("Eagle soars high \uD83E\uDD85");
+    }
+}
+
+public class Main {
+
+    // Accept any Flyable — duck or eagle, doesn't matter
+    static void makeItFly(Flyable f) {
+        f.fly();
+    }
+
+    public static void main(String[] args) {
+        Duck  duck  = new Duck("Donald");
+        Eagle eagle = new Eagle();
+
+        makeItFly(duck);    // Donald is flying 🦆
+        makeItFly(eagle);   // Eagle soars high 🦅
+
+        duck.swim();        // Donald is swimming 🌊
+        duck.land();        // Landing safely...  (default method)
+    }
+}
+`.trim()],
+
+};
+
+// ─────────────────────────────────────────────────────────────────
+// Render all code blocks on page load
+// ─────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  Object.entries(codes).forEach(([id, [filename, code]]) => {
+    renderCode('code-' + id, filename, code);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────
+// QUIZ LOGIC
+// ─────────────────────────────────────────────────────────────────
+const answers = {
+  q1: { correct: 2, explain: "Correct! In Java you must use the new keyword: Car c = new Car(). new allocates memory and calls the constructor." },
+  q2: { correct: 1, explain: "Correct! Constructor overloading (multiple constructors with different parameter lists) is fully allowed. Constructors have no return type and must share the class name." },
+  q3: { correct: 0, explain: "Correct! private restricts access to only the class that declares it — the foundation of encapsulation." },
+  q4: { correct: 1, explain: "Correct! Java supports only single inheritance via extends. A class can extend exactly ONE parent. It may implement multiple interfaces." },
+  q5: { correct: 2, explain: "Correct! This is runtime polymorphism. The reference type is Animal, but the actual object is Dog, so the JVM calls Dog's sound() method at execution time." },
+  q6: { correct: 3, explain: "Correct! D is FALSE. Abstract classes still follow Java's single-inheritance rule — they can extend only one class. Multiple inheritance through extends is not allowed." },
+  q7: { correct: 3, explain: "Correct! A class can implement as many interfaces as needed — no upper limit. This is Java's solution to the multiple-inheritance limitation of classes." },
+  q8: { correct: 2, explain: "Correct! The same a.sound() call produces different output depending on whether the object is a Dog or a Cat — decided at runtime. That is polymorphism." }
+};
+
+let correctCount = 0;
+const answered = new Set();
+
+function answer(qId, chosen, correct) {
+  if (answered.has(qId)) return;
+  answered.add(qId);
+
+  const opts = document.querySelectorAll('#' + qId + ' .quiz-opt');
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  opts[chosen].classList.add(chosen === correct ? 'correct' : 'wrong');
+  if (chosen !== correct) opts[correct].classList.add('correct');
+
+  const isOk = chosen === correct;
+  if (isOk) correctCount++;
+
+  const fb = document.getElementById(qId + '-fb');
+  fb.className = 'quiz-feedback show ' + (isOk ? 'ok' : 'no');
+  fb.textContent = (isOk ? '✓ ' : '✗ ') + answers[qId].explain;
+
+  document.getElementById(qId + '-next').classList.add('show');
+  document.getElementById('sideProgress').style.width =
+    Math.round((answered.size / 8) * 100) + '%';
+}
+
+function scrollNext(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+function showCompletion() {
+  const el = document.getElementById('completion');
+  document.getElementById('score-display').textContent = correctCount + ' / 8';
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Reading progress bar + active nav
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  document.getElementById('progress-bar').style.width =
+    (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+
+  const chapters = ['ch1','ch2','ch3','ch4','ch5','ch6','ch7','ch8'];
+  let active = 'ch1';
+  chapters.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 80) active = id;
+  });
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + active);
+  });
+});
+</script>
+</body>
+</html>
